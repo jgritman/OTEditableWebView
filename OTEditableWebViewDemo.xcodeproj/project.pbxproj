@@ -10,9 +10,9 @@
 		42EDAE811CAD2C0E0016E0FD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EDAE801CAD2C0E0016E0FD /* main.m */; };
 		42EDAE841CAD2C0E0016E0FD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EDAE831CAD2C0E0016E0FD /* AppDelegate.m */; };
 		42EDAE871CAD2C0E0016E0FD /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EDAE861CAD2C0E0016E0FD /* ViewController.m */; };
-		42EDAE8A1CAD2C0E0016E0FD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42EDAE881CAD2C0E0016E0FD /* Main.storyboard */; };
 		42EDAE8C1CAD2C0E0016E0FD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42EDAE8B1CAD2C0E0016E0FD /* Assets.xcassets */; };
 		42EDAE8F1CAD2C0E0016E0FD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42EDAE8D1CAD2C0E0016E0FD /* LaunchScreen.storyboard */; };
+		42EDAE991CAD2C630016E0FD /* UIWebView+OTEditableWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EDAE981CAD2C630016E0FD /* UIWebView+OTEditableWebView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,10 +22,11 @@
 		42EDAE831CAD2C0E0016E0FD /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		42EDAE851CAD2C0E0016E0FD /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		42EDAE861CAD2C0E0016E0FD /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		42EDAE891CAD2C0E0016E0FD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		42EDAE8B1CAD2C0E0016E0FD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		42EDAE8E1CAD2C0E0016E0FD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		42EDAE901CAD2C0E0016E0FD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		42EDAE971CAD2C630016E0FD /* UIWebView+OTEditableWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWebView+OTEditableWebView.h"; sourceTree = "<group>"; };
+		42EDAE981CAD2C630016E0FD /* UIWebView+OTEditableWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWebView+OTEditableWebView.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,6 +43,7 @@
 		42EDAE731CAD2C0E0016E0FD = {
 			isa = PBXGroup;
 			children = (
+				42EDAE961CAD2C260016E0FD /* OTEditableWebView */,
 				42EDAE7E1CAD2C0E0016E0FD /* OTEditableWebViewDemo */,
 				42EDAE7D1CAD2C0E0016E0FD /* Products */,
 			);
@@ -62,7 +64,6 @@
 				42EDAE831CAD2C0E0016E0FD /* AppDelegate.m */,
 				42EDAE851CAD2C0E0016E0FD /* ViewController.h */,
 				42EDAE861CAD2C0E0016E0FD /* ViewController.m */,
-				42EDAE881CAD2C0E0016E0FD /* Main.storyboard */,
 				42EDAE8B1CAD2C0E0016E0FD /* Assets.xcassets */,
 				42EDAE8D1CAD2C0E0016E0FD /* LaunchScreen.storyboard */,
 				42EDAE901CAD2C0E0016E0FD /* Info.plist */,
@@ -77,6 +78,15 @@
 				42EDAE801CAD2C0E0016E0FD /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		42EDAE961CAD2C260016E0FD /* OTEditableWebView */ = {
+			isa = PBXGroup;
+			children = (
+				42EDAE971CAD2C630016E0FD /* UIWebView+OTEditableWebView.h */,
+				42EDAE981CAD2C630016E0FD /* UIWebView+OTEditableWebView.m */,
+			);
+			path = OTEditableWebView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -138,7 +148,6 @@
 			files = (
 				42EDAE8F1CAD2C0E0016E0FD /* LaunchScreen.storyboard in Resources */,
 				42EDAE8C1CAD2C0E0016E0FD /* Assets.xcassets in Resources */,
-				42EDAE8A1CAD2C0E0016E0FD /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -149,6 +158,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42EDAE991CAD2C630016E0FD /* UIWebView+OTEditableWebView.m in Sources */,
 				42EDAE871CAD2C0E0016E0FD /* ViewController.m in Sources */,
 				42EDAE841CAD2C0E0016E0FD /* AppDelegate.m in Sources */,
 				42EDAE811CAD2C0E0016E0FD /* main.m in Sources */,
@@ -158,14 +168,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		42EDAE881CAD2C0E0016E0FD /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				42EDAE891CAD2C0E0016E0FD /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		42EDAE8D1CAD2C0E0016E0FD /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
