@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <JavaScriptCore/JavaScriptCore.h>
 
 @interface UIWebView (OTEditableWebView)
 
@@ -44,6 +45,13 @@
  *  Set editable/uneditable, or get editable status.
  */
 @property (nonatomic, assign) BOOL bodyContentEditable;
+
+/**
+ *  In editing mode, callback for event that content modified by user.
+ *
+ *  @param contentInputCallback Content input callback to set.
+ */
+- (void)setContentInputCallback:(void (^)(JSValue *msg))contentInputCallback;
 
 /**
  *  Get user selected plain text, supports muti-selection.

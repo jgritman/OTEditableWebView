@@ -63,6 +63,18 @@
 {
     self.webView.bodyContentEditable = !self.webView.bodyContentEditable;
     NSLog(@"%d", self.webView.bodyContentEditable);
+
+    //get content editable callback
+    if (self.webView.bodyContentEditable)
+    {
+        [self.webView setContentInputCallback:^(JSValue *msg){
+            NSLog(@"editing msg: %@", msg);
+        }];
+    }
+    else
+    {
+        [self.webView setContentInputCallback:nil];
+    }
 }
 
 - (void)logHTMLSourceCode

@@ -67,6 +67,24 @@
     }
 }
 
+- (void)setContentInputCallback:(void (^)(JSValue *msg))contentInputCallback
+{
+    JSContext *context = [self valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
+    
+    //remove old handler
+    [context evaluateScript:@"document.body.removeEventListener('input', OTWebViewBodyInputEventCallback, false);"];
+    context[@"OTWebViewBodyInputEventCallback"] = nil;
+    
+    //if new handler exist, add new handler
+    if (contentInputCallback)
+    {
+        context[@"OTWebViewBodyInputEventCallback"] = ^(JSValue *msg) {
+            contentInputCallback(msg);
+        };
+        [context evaluateScript:@"document.body.addEventListener('input', OTWebViewBodyInputEventCallback, false);"];
+    }
+}
+
 - (NSString *)selectedPlainString
 {
     NSString *const command = @"window.getSelection().toString()";
@@ -122,6 +140,8 @@
                                       [[self class] safeDoubleValueFromObject:rectObject[@"height"]]);
     return selectionRect;
 }
+
+#pragma mark - Util methods
 
 + (CGFloat)safeDoubleValueFromObject:(id)object
 {
