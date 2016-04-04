@@ -20,4 +20,6 @@
 
 @property (nonatomic, assign) BOOL bodyContentEditable;
 
+@property (nonatomic, readonly) CGRect selectionRectInWebView;
+
 @end

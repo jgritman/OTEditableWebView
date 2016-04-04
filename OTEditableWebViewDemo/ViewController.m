@@ -67,6 +67,7 @@
 
 - (void)logHTMLSourceCode
 {
+    NSLog(@"Selection range: %@", NSStringFromCGRect([self.webView selectionRectInWebView]));
     NSLog(@"%@", [self.webView allHTMLSourceCode]);
 //    NSLog(@"%@", [self.webView bodySourceCode]);
 //    NSLog(@"%@", [self.webView bodyInnerHTMLSourceCode]);
