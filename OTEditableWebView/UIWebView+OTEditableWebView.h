@@ -52,6 +52,7 @@
 
 /**
  *  Get selection rect in web view's native coordinate system. If multi-selected, return the first selected rect.
+ *  If need to get the editing cursor position, read this property too.
  */
 @property (nonatomic, readonly) CGRect selectionRectInWebView;
 
