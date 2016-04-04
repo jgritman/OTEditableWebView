@@ -10,16 +10,15 @@
 
 @implementation UIWebView (OTEditableWebView)
 
-- (NSString *)injectScriptText:(NSString *)scriptText
+- (void)injectScriptText:(NSString *)scriptText
 {
-    NSString *addScriptString =
+    NSString *const addScriptString =
     @"var script = document.createElement('script');"
     @"script.type = 'text/javascript';"
     @"script.text = \"%@\";"
     @"document.getElementsByTagName('head')[0].appendChild(script);";
     NSString *command = [NSString stringWithFormat:addScriptString, scriptText];
-    NSString *result = [self stringByEvaluatingJavaScriptFromString:command];
-    return result;
+    [self stringByEvaluatingJavaScriptFromString:command];
 }
 
 - (NSString *)allHTMLSourceCode
@@ -58,29 +57,37 @@
 {
     if (bodyContentEditable)
     {
-        NSString *command = @"document.body.setAttribute(\"contenteditable\",\"true\")";
+        NSString *const command = @"document.body.setAttribute(\"contenteditable\",\"true\")";
         [self stringByEvaluatingJavaScriptFromString:command];
     }
     else
     {
-        NSString *command = @"document.body.removeAttribute(\"contenteditable\")";
+        NSString *const command = @"document.body.removeAttribute(\"contenteditable\")";
         [self stringByEvaluatingJavaScriptFromString:command];
     }
 }
 
+- (NSString *)selectedPlainString
+{
+    NSString *const command = @"window.getSelection().toString()";
+    NSString *resultString = [self stringByEvaluatingJavaScriptFromString:command];
+    return resultString;
+}
+
 - (CGRect)selectionRectInWebView
 {
-    NSString *command =
+    NSString *const command =
     @"(function()"
     @"{"
-    @"  var defaultValue=JSON.stringify({\"left\": 0, \"right\": 0, \"top\": 0, \"bottom\": 0, \"width\": 0, \"height\": 0});"//默认值范围都是0
-    @"  var selection = window.getSelection();"
+    @"  var defaultValue=JSON.stringify({\"left\": 0, \"right\": 0, \"top\": 0, \"bottom\": 0, \"width\": 0, \"height\": 0});"//默认值rect是0
+    @"  var selection = window.getSelection();"//获取用户选择
     @"  var rangeCount = selection.rangeCount;"
     @"  if (rangeCount == 0)"
     @"  {"
     @"      return defaultValue;"
     @"  }"
     
+    //如果是多选，获取第一个选中块
     @"  var range = selection.getRangeAt(0);"
     @"  var rects = range.getClientRects();"
     @"  if (rects.length == 0)"
@@ -88,6 +95,7 @@
     @"      return defaultValue;"
     @"  }"
     
+    //获取第一个选中块中全部元素放在一起的rect（全部元素的最左、最右、最顶、最底坐标）
     @"  var minLeft = Math.min();"
     @"  var minTop = Math.min();"
     @"  var maxRight = Math.max();"
