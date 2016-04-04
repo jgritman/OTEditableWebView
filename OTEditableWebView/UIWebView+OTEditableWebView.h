@@ -42,6 +42,11 @@
 - (NSString *)bodyInnerHTMLSourceCode;
 
 /**
+ *  Get body content height.
+ */
+@property (nonatomic, readonly) CGFloat bodyContentHeight;
+
+/**
  *  Set editable/uneditable, or get editable status.
  */
 @property (nonatomic, assign) BOOL bodyContentEditable;

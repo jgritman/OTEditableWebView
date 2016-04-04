@@ -42,6 +42,14 @@
     return sourceCodeString;
 }
 
+- (CGFloat)bodyContentHeight
+{
+    NSString *const command = @"document.body.offsetHeight";
+    NSString *result = [self stringByEvaluatingJavaScriptFromString:command];
+    CGFloat height = [[self class] safeDoubleValueFromObject:result];
+    return height;
+}
+
 - (BOOL)bodyContentEditable
 {
     NSString *const command = @"document.body.getAttribute(\"contenteditable\")";

@@ -67,8 +67,10 @@
     //get content editable callback
     if (self.webView.bodyContentEditable)
     {
+        __weak typeof(self) weakSelf = self;
         [self.webView setContentInputCallback:^(JSValue *msg){
             NSLog(@"editing msg: %@", msg);
+            NSLog(@"%f", weakSelf.webView.bodyContentHeight);
         }];
     }
     else
