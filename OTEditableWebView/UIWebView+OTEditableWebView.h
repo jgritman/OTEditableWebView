@@ -10,6 +10,8 @@
 
 @interface UIWebView (OTEditableWebView)
 
+- (NSString *)injectScriptText:(NSString *)scriptText;
+
 - (NSString *)allHTMLSourceCode;
 
 - (NSString *)bodySourceCode;

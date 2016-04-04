@@ -10,6 +10,18 @@
 
 @implementation UIWebView (OTEditableWebView)
 
+- (NSString *)injectScriptText:(NSString *)scriptText
+{
+    NSString *addScriptString =
+    @"var script = document.createElement('script');"
+    @"script.type = 'text/javascript';"
+    @"script.text = \"%@\";"
+    @"document.getElementsByTagName('head')[0].appendChild(script);";
+    NSString *command = [NSString stringWithFormat:addScriptString, scriptText];
+    NSString *result = [self stringByEvaluatingJavaScriptFromString:command];
+    return result;
+}
+
 - (NSString *)allHTMLSourceCode
 {
     NSString *const command = @"document.documentElement.outerHTML";
