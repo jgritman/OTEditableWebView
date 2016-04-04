@@ -62,15 +62,18 @@
 - (void)toggleEditable
 {
     self.webView.bodyContentEditable = !self.webView.bodyContentEditable;
-    NSLog(@"%d", self.webView.bodyContentEditable);
+    NSLog(@"Content editable: %d", self.webView.bodyContentEditable);
 
     //get content editable callback
     if (self.webView.bodyContentEditable)
     {
+        //If not use weak-strong dance here, will not cause a retain-cycle.
+        //because it seems that UIWebView will not strong reference its JSContext.
+        //also use weakSelf here to silence compiler's retain-cycle warning.
         __weak typeof(self) weakSelf = self;
         [self.webView setContentInputCallback:^(JSValue *msg){
-            NSLog(@"editing msg: %@", msg);
-            NSLog(@"%f", weakSelf.webView.bodyContentHeight);
+            NSLog(@"Editing msg: %@", msg);
+            NSLog(@"Body height: %f", weakSelf.webView.bodyContentHeight);
         }];
     }
     else
@@ -82,7 +85,7 @@
 - (void)logHTMLSourceCode
 {
     NSLog(@"Selection rect: %@", NSStringFromCGRect([self.webView selectionRectInWebView]));
-    NSLog(@"%@", [self.webView allHTMLSourceCode]);
+    NSLog(@"HTML source code: %@", [self.webView allHTMLSourceCode]);
 //    NSLog(@"%@", [self.webView bodySourceCode]);
 //    NSLog(@"%@", [self.webView bodyInnerHTMLSourceCode]);
 }
