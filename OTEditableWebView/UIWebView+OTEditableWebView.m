@@ -79,17 +79,45 @@
 {
     JSContext *context = [self valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
     
+    NSString *const eventName = @"input";
+    NSString *const callbackKey = @"OTWebViewBodyInputEventCallback";
+    NSString *addCommand = [NSString stringWithFormat:@"document.body.addEventListener('%@', %@, false);", eventName, callbackKey];
+    NSString *removeCommand = [NSString stringWithFormat:@"document.body.removeEventListener('%@', %@, false);", eventName, callbackKey];
+    
     //remove old handler
-    [context evaluateScript:@"document.body.removeEventListener('input', OTWebViewBodyInputEventCallback, false);"];
-    context[@"OTWebViewBodyInputEventCallback"] = nil;
+    [context evaluateScript:removeCommand];
+    context[callbackKey] = nil;
     
     //if new handler exist, add new handler
     if (contentInputCallback)
     {
-        context[@"OTWebViewBodyInputEventCallback"] = ^(JSValue *msg) {
+        context[callbackKey] = ^(JSValue *msg) {
             contentInputCallback(msg);
         };
-        [context evaluateScript:@"document.body.addEventListener('input', OTWebViewBodyInputEventCallback, false);"];
+        [context evaluateScript:addCommand];
+    }
+}
+
+- (void)setContentFocusCallback:(void (^)(JSValue *msg))contentFocusCallback
+{
+    JSContext *context = [self valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
+    
+    NSString *const eventName = @"focus";
+    NSString *const callbackKey = @"OTWebViewBodyFocusEventCallback";
+    NSString *addCommand = [NSString stringWithFormat:@"document.body.addEventListener('%@', %@, false);", eventName, callbackKey];
+    NSString *removeCommand = [NSString stringWithFormat:@"document.body.removeEventListener('%@', %@, false);", eventName, callbackKey];
+    
+    //remove old handler
+    [context evaluateScript:removeCommand];
+    context[callbackKey] = nil;
+    
+    //if new handler exist, add new handler
+    if (contentFocusCallback)
+    {
+        context[callbackKey] = ^(JSValue *msg) {
+            contentFocusCallback(msg);
+        };
+        [context evaluateScript:addCommand];
     }
 }
 

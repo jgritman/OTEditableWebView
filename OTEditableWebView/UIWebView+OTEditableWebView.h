@@ -59,6 +59,14 @@
 - (void)setContentInputCallback:(void (^)(JSValue *msg))contentInputCallback;
 
 /**
+ *  In editing mode, callback for event that body get focus
+ *
+ *  @param contentFocusCallback Body focus callback to set.
+ *  @discussion Only editing body focused event will callback. Input label focused will not.
+ */
+- (void)setContentFocusCallback:(void (^)(JSValue *msg))contentFocusCallback;
+
+/**
  *  Get user selected plain text, supports muti-selection.
  */
 @property (nonatomic, readonly) NSString *selectedPlainString;
