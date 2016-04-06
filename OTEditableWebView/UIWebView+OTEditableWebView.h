@@ -82,8 +82,16 @@
 /**
  *  Get selection rect in web view's native coordinate system. If multi-selected, return the first selected rect.
  *  If need to get the editing cursor position, read this property too.
+ @discusstion Difference between `selectionBoundingRectInWebView`: Can get cursor position. Enum only direct sub-dom rects to get result.
  */
 @property (nonatomic, readonly) CGRect selectionRectInWebView;
+
+/**
+ *  Get selection rect in web view's native coordinate system. If multi-selected, return the combined selected rect.
+ *  If need to get the editing cursor position, read `selectionRectInWebView` instead.
+ @discusstion Difference between `selectionRectInWebView`: Cannot get cursor position, otherwise return CGRectZero. Enum all sub-doms rects recursive to get result.
+ */
+@property (nonatomic, readonly) CGRect selectionBoundingRectInWebView;
 
 /**
  *  Begin observer is focused.

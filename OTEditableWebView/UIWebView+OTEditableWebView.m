@@ -206,6 +206,35 @@
     return selectionRect;
 }
 
+- (CGRect)selectionBoundingRectInWebView
+{
+    NSString *const command =
+    @"(function()"
+    @"{"
+    @"  var defaultValue=JSON.stringify({\"left\": 0, \"right\": 0, \"top\": 0, \"bottom\": 0, \"width\": 0, \"height\": 0});"//默认值rect是0
+    @"  var selection = window.getSelection();"//获取用户选择
+    @"  var rangeCount = selection.rangeCount;"
+    @"  if (rangeCount == 0)"
+    @"  {"
+    @"      return defaultValue;"
+    @"  }"
+    
+    //如果是多选，获取第一个选中块
+    @"  var range = selection.getRangeAt(0);"
+    @"  var rect = range.getBoundingClientRect();"
+    @"  var resultObject = {\"left\": rect.left, \"right\": rect.right, \"top\": rect.top, \"bottom\": rect.bottom, \"width\": rect.width, \"height\": rect.height};"
+    @"  var jsonString = JSON.stringify(resultObject);"
+    @"  return jsonString;"
+    @"})();";
+    NSString* rectString = [self stringByEvaluatingJavaScriptFromString:command];
+    NSDictionary *rectObject = [[self class] objectFromJSONString:rectString];
+    CGRect selectionRect = CGRectMake([[self class] safeDoubleValueFromObject:rectObject[@"left"]],
+                                      [[self class] safeDoubleValueFromObject:rectObject[@"top"]],
+                                      [[self class] safeDoubleValueFromObject:rectObject[@"width"]],
+                                      [[self class] safeDoubleValueFromObject:rectObject[@"height"]]);
+    return selectionRect;
+}
+
 - (void)beginObserveIsBodyFocused
 {
     JSContext *context = [self valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
