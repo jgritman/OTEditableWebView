@@ -48,9 +48,9 @@
     return sourceCodeString;
 }
 
-- (CGFloat)bodyContentHeight
+- (CGFloat)documentHeight
 {
-    NSString *const command = @"document.body.offsetHeight";
+    NSString *const command = @"document.documentElement.offsetHeight";
     NSString *result = [self stringByEvaluatingJavaScriptFromString:command];
     CGFloat height = [[self class] safeDoubleValueFromObject:result];
     return height;

@@ -42,9 +42,9 @@
 - (NSString *)bodyInnerHTMLSourceCode;
 
 /**
- *  Get body content height.
+ *  Get document content height.
  */
-@property (nonatomic, readonly) CGFloat bodyContentHeight;
+@property (nonatomic, readonly) CGFloat documentHeight;
 
 /**
  *  Set editable/uneditable, or get editable status.

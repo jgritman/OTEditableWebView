@@ -73,7 +73,7 @@
         __weak typeof(self) weakSelf = self;
         [self.webView setContentInputCallback:^(JSValue *msg){
             NSLog(@"Editing msg: %@", msg);
-            NSLog(@"Body height: %f", weakSelf.webView.bodyContentHeight);
+            NSLog(@"Document height: %f", weakSelf.webView.documentHeight);
         }];
         [self.webView setContentFocusInCallback:^(JSValue *msg) {
             NSLog(@"Focus in msg: %@", msg);
