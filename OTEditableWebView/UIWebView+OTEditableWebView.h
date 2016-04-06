@@ -77,4 +77,11 @@
  */
 @property (nonatomic, readonly) CGRect selectionRectInWebView;
 
+/**
+ *  Begin input at document.body
+ *
+ *  @return If begin input successed.
+ */
+- (BOOL)beginInput;
+
 @end

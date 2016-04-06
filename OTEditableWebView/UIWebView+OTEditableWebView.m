@@ -214,4 +214,17 @@
     return ret;
 }
 
+- (BOOL)beginInput
+{
+    if (!self.bodyContentEditable)
+    {
+        return NO;
+    }
+
+    self.keyboardDisplayRequiresUserAction = NO;
+    [self stringByEvaluatingJavaScriptFromString:@"document.body.focus()"];
+    
+    return YES;
+}
+
 @end
