@@ -84,4 +84,11 @@
  */
 - (BOOL)beginInput;
 
+/**
+ *  End input at document.body
+ *
+ *  @return If begin input successed.
+ */
+- (BOOL)endInput;
+
 @end

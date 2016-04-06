@@ -223,7 +223,17 @@
 
     self.keyboardDisplayRequiresUserAction = NO;
     [self stringByEvaluatingJavaScriptFromString:@"document.body.focus()"];
+    return YES;
+}
+
+- (BOOL)endInput
+{
+    if (!self.bodyContentEditable)
+    {
+        return NO;
+    }
     
+    [self stringByEvaluatingJavaScriptFromString:@"document.body.blur()"];
     return YES;
 }
 
