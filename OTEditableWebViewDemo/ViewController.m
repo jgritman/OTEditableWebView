@@ -34,8 +34,8 @@
     [self.view addSubview:self.toggleEditableButton];
     
     self.logHTMLSourceCodeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.logHTMLSourceCodeButton addTarget:self action:@selector(logHTMLSourceCode) forControlEvents:UIControlEventTouchUpInside];
-    [self.logHTMLSourceCodeButton setTitle:@"Log Source Code" forState:UIControlStateNormal];
+    [self.logHTMLSourceCodeButton addTarget:self action:@selector(logHTMLEditingInfo) forControlEvents:UIControlEventTouchUpInside];
+    [self.logHTMLSourceCodeButton setTitle:@"Log Editing Info" forState:UIControlStateNormal];
     [self.logHTMLSourceCodeButton setBackgroundColor:[UIColor grayColor]];
     [self.view addSubview:self.logHTMLSourceCodeButton];
     
@@ -81,6 +81,8 @@
         [self.webView setContentFocusOutCallback:^(JSValue *msg) {
             NSLog(@"Focus out msg: %@", msg);
         }];
+        
+        [self.webView beginObserveIsBodyFocused];
     }
     else
     {
@@ -90,8 +92,9 @@
     }
 }
 
-- (void)logHTMLSourceCode
+- (void)logHTMLEditingInfo
 {
+    NSLog(@"Is body focused: %d", [self.webView isBodyFocused]);
     NSLog(@"Selection rect: %@", NSStringFromCGRect([self.webView selectionRectInWebView]));
     NSLog(@"HTML source code: %@", [self.webView allHTMLSourceCode]);
 //    NSLog(@"%@", [self.webView bodySourceCode]);

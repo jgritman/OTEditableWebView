@@ -86,6 +86,20 @@
 @property (nonatomic, readonly) CGRect selectionRectInWebView;
 
 /**
+ *  Begin observer is focused.
+ *  Call this method after webview did finish load.
+ *
+ */
+- (void)beginObserveIsBodyFocused;
+
+/**
+ *  Get is body get focused. This method only works after `beginObserveIsBodyFocused` get called.
+ *
+ *  @return Is body get focused.
+ */
+- (BOOL)isBodyFocused;
+
+/**
  *  Begin input at document.body
  *
  *  @return If begin input successed.

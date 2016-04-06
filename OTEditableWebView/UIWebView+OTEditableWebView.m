@@ -7,6 +7,7 @@
 //
 
 #import "UIWebView+OTEditableWebView.h"
+#import <objc/runtime.h>
 
 @implementation UIWebView (OTEditableWebView)
 
@@ -205,6 +206,82 @@
     return selectionRect;
 }
 
+- (void)beginObserveIsBodyFocused
+{
+    JSContext *context = [self valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
+    
+    __weak typeof (self) weakSelf = self;
+    //add focus in event
+    {
+        NSString *const focusInEventName = @"focusin";
+        NSString *const focusInCallbackKey = @"OTWebViewBodyIsFocusedFocusInCallback";
+        NSString *addFocusInCommand = [NSString stringWithFormat:@"document.body.addEventListener('%@', %@, false);", focusInEventName, focusInCallbackKey];
+        NSString *removeFocusInCommand = [NSString stringWithFormat:@"document.body.removeEventListener('%@', %@, false);", focusInEventName, focusInCallbackKey];
+        
+        //remove old handler
+        [context evaluateScript:removeFocusInCommand];
+        context[focusInCallbackKey] = nil;
+        
+        //add new handler
+        context[focusInCallbackKey] = ^(JSValue *msg) {
+            [weakSelf setIsBodyFocused:YES];
+        };
+        [context evaluateScript:addFocusInCommand];
+    }
+    
+    {
+        NSString *const focusOutEventName = @"focusout";
+        NSString *const focusOutCallbackKey = @"OTWebViewBodyIsFocusedFocusOutCallback";
+        NSString *addFocusOutCommand = [NSString stringWithFormat:@"document.body.addEventListener('%@', %@, false);", focusOutEventName, focusOutCallbackKey];
+        NSString *removeFocusOutCommand = [NSString stringWithFormat:@"document.body.removeEventListener('%@', %@, false);", focusOutEventName, focusOutCallbackKey];
+        
+        //remove old handler
+        [context evaluateScript:removeFocusOutCommand];
+        context[focusOutCallbackKey] = nil;
+        
+        //add new handler
+        context[focusOutCallbackKey] = ^(JSValue *msg) {
+            [weakSelf setIsBodyFocused:NO];
+        };
+        [context evaluateScript:addFocusOutCommand];
+    }
+}
+
+- (BOOL)isBodyFocused
+{
+    NSNumber *number = objc_getAssociatedObject(self, @"OTWebViewIsBodyFocused");
+    BOOL isBodyFocused = number.boolValue;
+    return isBodyFocused;
+}
+
+- (void)setIsBodyFocused:(BOOL)focused
+{
+    objc_setAssociatedObject(self, @"OTWebViewIsBodyFocused", [NSNumber numberWithBool:focused], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (BOOL)beginInput
+{
+    if (!self.bodyContentEditable)
+    {
+        return NO;
+    }
+    
+    self.keyboardDisplayRequiresUserAction = NO;
+    [self stringByEvaluatingJavaScriptFromString:@"document.body.focus()"];
+    return YES;
+}
+
+- (BOOL)endInput
+{
+    if (!self.bodyContentEditable)
+    {
+        return NO;
+    }
+    
+    [self stringByEvaluatingJavaScriptFromString:@"document.body.blur()"];
+    return YES;
+}
+
 #pragma mark - Util methods
 
 + (CGFloat)safeDoubleValueFromObject:(id)object
@@ -235,29 +312,6 @@
         return nil;
     }
     return ret;
-}
-
-- (BOOL)beginInput
-{
-    if (!self.bodyContentEditable)
-    {
-        return NO;
-    }
-
-    self.keyboardDisplayRequiresUserAction = NO;
-    [self stringByEvaluatingJavaScriptFromString:@"document.body.focus()"];
-    return YES;
-}
-
-- (BOOL)endInput
-{
-    if (!self.bodyContentEditable)
-    {
-        return NO;
-    }
-    
-    [self stringByEvaluatingJavaScriptFromString:@"document.body.blur()"];
-    return YES;
 }
 
 @end
