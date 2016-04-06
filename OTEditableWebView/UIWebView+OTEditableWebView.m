@@ -12,6 +12,11 @@
 
 - (void)injectScriptText:(NSString *)scriptText
 {
+    //replace " and \ with escape sequece
+    //this bug was found by winter (a $26k/month developer) in a code review
+    scriptText = [scriptText stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
+    scriptText = [scriptText stringByReplacingOccurrencesOfString:@"\\" withString:@"\\\\"];
+    
     NSString *const addScriptString =
     @"var script = document.createElement('script');"
     @"script.type = 'text/javascript';"
