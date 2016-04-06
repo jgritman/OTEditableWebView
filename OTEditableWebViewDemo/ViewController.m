@@ -75,14 +75,18 @@
             NSLog(@"Editing msg: %@", msg);
             NSLog(@"Body height: %f", weakSelf.webView.bodyContentHeight);
         }];
-        [self.webView setContentFocusCallback:^(JSValue *msg) {
-            NSLog(@"Focus msg: %@", msg);
+        [self.webView setContentFocusInCallback:^(JSValue *msg) {
+            NSLog(@"Focus in msg: %@", msg);
+        }];
+        [self.webView setContentFocusOutCallback:^(JSValue *msg) {
+            NSLog(@"Focus out msg: %@", msg);
         }];
     }
     else
     {
         [self.webView setContentInputCallback:nil];
-        [self.webView setContentFocusCallback:nil];
+        [self.webView setContentFocusInCallback:nil];
+        [self.webView setContentFocusOutCallback:nil];
     }
 }
 

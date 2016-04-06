@@ -103,12 +103,12 @@
     }
 }
 
-- (void)setContentFocusCallback:(void (^)(JSValue *msg))contentFocusCallback
+- (void)setContentFocusInCallback:(void (^)(JSValue *msg))contentFocusCallback
 {
     JSContext *context = [self valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
     
-    NSString *const eventName = @"focus";
-    NSString *const callbackKey = @"OTWebViewBodyFocusEventCallback";
+    NSString *const eventName = @"focusin";
+    NSString *const callbackKey = @"OTWebViewBodyFocusInEventCallback";
     NSString *addCommand = [NSString stringWithFormat:@"document.body.addEventListener('%@', %@, false);", eventName, callbackKey];
     NSString *removeCommand = [NSString stringWithFormat:@"document.body.removeEventListener('%@', %@, false);", eventName, callbackKey];
     
@@ -121,6 +121,29 @@
     {
         context[callbackKey] = ^(JSValue *msg) {
             contentFocusCallback(msg);
+        };
+        [context evaluateScript:addCommand];
+    }
+}
+
+- (void)setContentFocusOutCallback:(void (^)(JSValue *msg))contentFocusOutCallback
+{
+    JSContext *context = [self valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
+    
+    NSString *const eventName = @"focusout";
+    NSString *const callbackKey = @"OTWebViewBodyFocusOutEventCallback";
+    NSString *addCommand = [NSString stringWithFormat:@"document.body.addEventListener('%@', %@, false);", eventName, callbackKey];
+    NSString *removeCommand = [NSString stringWithFormat:@"document.body.removeEventListener('%@', %@, false);", eventName, callbackKey];
+    
+    //remove old handler
+    [context evaluateScript:removeCommand];
+    context[callbackKey] = nil;
+    
+    //if new handler exist, add new handler
+    if (contentFocusOutCallback)
+    {
+        context[callbackKey] = ^(JSValue *msg) {
+            contentFocusOutCallback(msg);
         };
         [context evaluateScript:addCommand];
     }

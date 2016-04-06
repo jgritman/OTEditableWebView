@@ -64,7 +64,15 @@
  *  @param contentFocusCallback Body focus callback to set.
  *  @discussion Only editing body focused event will callback. Input label focused will not.
  */
-- (void)setContentFocusCallback:(void (^)(JSValue *msg))contentFocusCallback;
+- (void)setContentFocusInCallback:(void (^)(JSValue *msg))contentFocusCallback;
+
+/**
+ *  In editing mode, callback for event that body get focus out
+ *
+ *  @param contentFocusOutCallback Body focus out callback to set.
+ *  @discussion Only editing body focused out event will callback. Input label focused out will not.
+ */
+- (void)setContentFocusOutCallback:(void (^)(JSValue *msg))contentFocusOutCallback;
 
 /**
  *  Get user selected plain text, supports muti-selection.
