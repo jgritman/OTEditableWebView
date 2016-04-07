@@ -290,14 +290,47 @@
 
 - (BOOL)beginInput
 {
+    return [self beginInputWithElementID:nil];
+}
+
+- (BOOL)beginInputWithElementID:(NSString *)elementID
+{
     if (!self.bodyContentEditable)
     {
         return NO;
     }
     
     self.keyboardDisplayRequiresUserAction = NO;
-    [self stringByEvaluatingJavaScriptFromString:@"document.body.focus()"];
-    return YES;
+    
+    NSString *elementFocusCommandFormat =
+    @"(function(element_id)"
+    @"{"
+    @"  var element;"
+    @"  if (element_id)"
+    @"  {"
+    @"      element = document.getElementById(element_id);"
+    @"  }"
+    @"  else"
+    @"  {"
+    @"      element = document.body;"
+    @"  }"
+    
+    @"  if (element)"
+    @"  {"
+    @"      element.focus();"
+    @"      return \"true\""
+    @"  }"
+    @"  else"
+    @"  {"
+    @"      return \"false\""
+    @"  }"
+    @"})(\"%@\");";
+    
+    NSString *safeElementID = elementID ? [elementID stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""] : @"";
+    NSString *elementFocusCommand = [NSString stringWithFormat:elementFocusCommandFormat, safeElementID];
+    NSString *result = [self stringByEvaluatingJavaScriptFromString:elementFocusCommand];
+    BOOL success = [result isEqualToString:@"true"];
+    return success;
 }
 
 - (BOOL)endInput

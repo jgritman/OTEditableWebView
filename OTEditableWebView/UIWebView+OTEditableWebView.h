@@ -115,6 +115,15 @@
 - (BOOL)beginInput;
 
 /**
+ *  Begin input at element or document.body.
+ *
+ *  @param elementID Element ID need to be focus. If pass nil or empty string, will focus body.
+ *
+ *  @return If element found successed.
+ */
+- (BOOL)beginInputWithElementID:(NSString *)elementID;
+
+/**
  *  End input at document.body
  *
  *  @return If begin input successed.
