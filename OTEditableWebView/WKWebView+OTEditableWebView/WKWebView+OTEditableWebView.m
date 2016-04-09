@@ -19,19 +19,29 @@
 - (NSString *)stringByEvaluatingJavaScriptFromString:(NSString *)javaScriptString
 {
     __block NSString *resultString = nil;
-    dispatch_semaphore_t sema = dispatch_semaphore_create(0);
     [self evaluateJavaScript:javaScriptString completionHandler:^(id _Nullable result, NSError * _Nullable error) {
-        if ([result isKindOfClass:[NSString class]])
+        if (error)
+        {
+            resultString = @"";
+        }
+        else if ([result isKindOfClass:[NSString class]])
         {
             resultString = result;
+        }
+        else if ([resultString isKindOfClass:[NSNull class]])
+        {
+            resultString = @"";
         }
         else
         {
             resultString = [result description];
         }
-        dispatch_semaphore_signal(sema);
+        
     }];
-    dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
+    while (resultString == nil)
+    {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
+    }
     return resultString;
 }
 
@@ -96,17 +106,20 @@
     if (bodyContentEditable)
     {
         NSString *const command = @"document.body.setAttribute(\"contenteditable\",\"true\")";
-        [self stringByEvaluatingJavaScriptFromString:command];
+        [self evaluateJavaScriptWithOutCallback:command];
     }
     else
     {
         NSString *const command = @"document.body.removeAttribute(\"contenteditable\")";
-        [self stringByEvaluatingJavaScriptFromString:command];
+        [self evaluateJavaScriptWithOutCallback:command];
     }
 }
 
 - (void)setContentInputCallback:(void (^)(JSValue *msg))contentInputCallback
 {
+#warning unfinished
+    [self addMessageHandlerIfNotExist:@"aa"];
+    return;
     JSContext *context = [self valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
     
     NSString *const eventName = @"input";
@@ -130,6 +143,9 @@
 
 - (void)setContentFocusInCallback:(void (^)(JSValue *msg))contentFocusCallback
 {
+#warning unfinished
+    [self addMessageHandlerIfNotExist:@"aa"];
+    return;
     JSContext *context = [self valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
     
     NSString *const eventName = @"focusin";
@@ -153,6 +169,9 @@
 
 - (void)setContentFocusOutCallback:(void (^)(JSValue *msg))contentFocusOutCallback
 {
+#warning unfinished
+    [self addMessageHandlerIfNotExist:@"aa"];
+    return;
     JSContext *context = [self valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
     
     NSString *const eventName = @"focusout";
@@ -261,6 +280,9 @@
 
 - (void)beginObserveIsBodyFocused
 {
+#warning unfinished
+    [self addMessageHandlerIfNotExist:@"aa"];
+    return;
     JSContext *context = [self valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
     
     __weak typeof (self) weakSelf = self;
@@ -365,8 +387,18 @@
         return NO;
     }
     
-    [self stringByEvaluatingJavaScriptFromString:@"document.body.blur()"];
+    [self evaluateJavaScriptWithOutCallback:@"document.body.blur()"];
     return YES;
+}
+
+#pragma mark - Message Handler Methods
+
+- (void)addMessageHandlerIfNotExist:(NSString *)handlerName
+{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        [self.configuration.userContentController addScriptMessageHandler:self name:@"aa"];
+    });
 }
 
 #pragma mark - Util methods
