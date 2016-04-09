@@ -73,15 +73,14 @@
         //because it seems that UIWebView will not strong reference its JSContext.
         //also use weakSelf here to silence compiler's retain-cycle warning.
         __weak typeof(self) weakSelf = self;
-        [self.webView setContentInputCallback:^(JSValue *msg){
-            NSLog(@"Editing msg: %@", msg);
+        [self.webView setContentInputCallback:^{
             NSLog(@"Document height: %f", weakSelf.webView.documentHeight);
         }];
-        [self.webView setContentFocusInCallback:^(JSValue *msg) {
-            NSLog(@"Focus in msg: %@", msg);
+        [self.webView setContentFocusInCallback:^{
+            NSLog(@"Focus in");
         }];
-        [self.webView setContentFocusOutCallback:^(JSValue *msg) {
-            NSLog(@"Focus out msg: %@", msg);
+        [self.webView setContentFocusOutCallback:^{
+            NSLog(@"Focus out");
         }];
         
         [self.webView beginObserveIsBodyFocused];

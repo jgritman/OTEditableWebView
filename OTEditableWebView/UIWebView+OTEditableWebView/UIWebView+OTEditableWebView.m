@@ -81,7 +81,7 @@
     }
 }
 
-- (void)setContentInputCallback:(void (^)(JSValue *msg))contentInputCallback
+- (void)setContentInputCallback:(void (^)(void))contentInputCallback
 {
     JSContext *context = [self valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
     
@@ -98,13 +98,13 @@
     if (contentInputCallback)
     {
         context[callbackKey] = ^(JSValue *msg) {
-            contentInputCallback(msg);
+            contentInputCallback();
         };
         [context evaluateScript:addCommand];
     }
 }
 
-- (void)setContentFocusInCallback:(void (^)(JSValue *msg))contentFocusCallback
+- (void)setContentFocusInCallback:(void (^)(void))contentFocusCallback
 {
     JSContext *context = [self valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
     
@@ -121,13 +121,13 @@
     if (contentFocusCallback)
     {
         context[callbackKey] = ^(JSValue *msg) {
-            contentFocusCallback(msg);
+            contentFocusCallback();
         };
         [context evaluateScript:addCommand];
     }
 }
 
-- (void)setContentFocusOutCallback:(void (^)(JSValue *msg))contentFocusOutCallback
+- (void)setContentFocusOutCallback:(void (^)(void))contentFocusOutCallback
 {
     JSContext *context = [self valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
     
@@ -144,7 +144,7 @@
     if (contentFocusOutCallback)
     {
         context[callbackKey] = ^(JSValue *msg) {
-            contentFocusOutCallback(msg);
+            contentFocusOutCallback();
         };
         [context evaluateScript:addCommand];
     }

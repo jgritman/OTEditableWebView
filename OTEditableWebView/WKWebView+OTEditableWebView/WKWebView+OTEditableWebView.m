@@ -87,7 +87,7 @@
 {
     NSString *const command = @"document.documentElement.offsetHeight";
     NSString *result = [self stringByEvaluatingJavaScriptFromString:command];
-    CGFloat height = [[self class] safeDoubleValueFromObject:result];
+    CGFloat height = [OTWebKitObjectConverter safeDoubleValueFromObject:result];
     return height;
 }
 
@@ -116,21 +116,20 @@
     }
 }
 
-- (void)setContentInputCallback:(void (^)(JSValue *msg))contentInputCallback
+- (void)setContentInputCallback:(void (^)(void))contentInputCallback
 {
     [self registerSelfAsWebKitHandlerIfNotRegistered];
     
-#warning unfinished
     NSString *const eventName = @"input";
-    NSString *const callbackName = @"otwebview_body_input_event_callback";
+    NSString *const functionName = @"otwebview_body_input_event_callback";
     NSString *const callbackCommandFormat =
     @"var %@ = function () {"//fuction name
-    @"  var messageToPost = 'input';"
-    @"  window.webkit.messageHandlers.%@.postMessage(messageToPost);"//message handler key
+    @"  var messageToPost = '%@';"//event name, used to save callback as key in callback container
+    @"  window.webkit.messageHandlers.%@.postMessage(messageToPost);"//message handler name
     @"};";
-    NSString *const callbackCommand = [NSString stringWithFormat:callbackCommandFormat, callbackName, [[self class] webkitCallbackHandlerName]];
-    NSString *addCommand = [NSString stringWithFormat:@"%@ document.body.addEventListener('%@', %@, false);", callbackCommand, eventName, callbackName];
-    NSString *removeCommand = [NSString stringWithFormat:@"document.body.removeEventListener('%@', %@, false);", eventName, callbackName];
+    NSString *const callbackCommand = [NSString stringWithFormat:callbackCommandFormat, functionName, eventName, [[self class] webkitCallbackHandlerName]];
+    NSString *addCommand = [NSString stringWithFormat:@"%@ document.body.addEventListener('%@', %@, false);", callbackCommand, eventName, functionName];
+    NSString *removeCommand = [NSString stringWithFormat:@"document.body.removeEventListener('%@', %@, false);", eventName, functionName];
     
     //remove old handler
     [self evaluateJavaScriptWithOutCallback:removeCommand];
@@ -138,11 +137,12 @@
     //if new handler exist, add new handler
     if (contentInputCallback)
     {
+        [self callbackContainer][eventName] = [contentInputCallback copy];
         [self evaluateJavaScriptWithOutCallback:addCommand];
     }
 }
 
-- (void)setContentFocusInCallback:(void (^)(JSValue *msg))contentFocusCallback
+- (void)setContentFocusInCallback:(void (^)(void))contentFocusCallback
 {
 #warning unfinished
     return;
@@ -161,13 +161,13 @@
     if (contentFocusCallback)
     {
         context[callbackKey] = ^(JSValue *msg) {
-            contentFocusCallback(msg);
+            contentFocusCallback();
         };
         [context evaluateScript:addCommand];
     }
 }
 
-- (void)setContentFocusOutCallback:(void (^)(JSValue *msg))contentFocusOutCallback
+- (void)setContentFocusOutCallback:(void (^)(void))contentFocusOutCallback
 {
 #warning unfinished
     return;
@@ -186,7 +186,7 @@
     if (contentFocusOutCallback)
     {
         context[callbackKey] = ^(JSValue *msg) {
-            contentFocusOutCallback(msg);
+            contentFocusOutCallback();
         };
         [context evaluateScript:addCommand];
     }
@@ -241,10 +241,10 @@
     @"})();";
     NSString* rectString = [self stringByEvaluatingJavaScriptFromString:command];
     NSDictionary *rectObject = [[self class] objectFromJSONString:rectString];
-    CGRect selectionRect = CGRectMake([[self class] safeDoubleValueFromObject:rectObject[@"left"]],
-                                      [[self class] safeDoubleValueFromObject:rectObject[@"top"]],
-                                      [[self class] safeDoubleValueFromObject:rectObject[@"width"]],
-                                      [[self class] safeDoubleValueFromObject:rectObject[@"height"]]);
+    CGRect selectionRect = CGRectMake([OTWebKitObjectConverter safeDoubleValueFromObject:rectObject[@"left"]],
+                                      [OTWebKitObjectConverter safeDoubleValueFromObject:rectObject[@"top"]],
+                                      [OTWebKitObjectConverter safeDoubleValueFromObject:rectObject[@"width"]],
+                                      [OTWebKitObjectConverter safeDoubleValueFromObject:rectObject[@"height"]]);
     return selectionRect;
 }
 
