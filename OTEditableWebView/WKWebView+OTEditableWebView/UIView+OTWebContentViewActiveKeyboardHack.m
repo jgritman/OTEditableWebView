@@ -7,6 +7,7 @@
 //
 
 #import "UIView+OTWebContentViewActiveKeyboardHack.h"
+#import "WKWebView+OTEditableWebView.h"
 #import <objc/runtime.h>
 
 @implementation UIView (OTWebContentViewActiveKeyboardHack)
@@ -43,7 +44,24 @@
 
 - (void)otEditingWebViewSwizzStartAssistingNode:(void *)node userIsInteracting:(BOOL)isInteracting blurPreviousNode:(BOOL)blurPreviousNode userObject:(id)userObject
 {
-    [self otEditingWebViewSwizzStartAssistingNode:node userIsInteracting:YES blurPreviousNode:blurPreviousNode userObject:userObject];
+    UIView *superView = self;
+    while (superView)
+    {
+        superView = superView.superview;
+        if ([superView isKindOfClass:[WKWebView class]])
+        {
+            break;
+        }
+    }
+    
+    BOOL canActiveWithoutUserInteraction = NO;
+    if ([superView isKindOfClass:[WKWebView class]])
+    {
+        canActiveWithoutUserInteraction = [((WKWebView *)superView) canActiveKeyboardWithoutUserInteraction];
+    }
+    
+    BOOL userIsInteraction = canActiveWithoutUserInteraction || isInteracting;
+    [self otEditingWebViewSwizzStartAssistingNode:node userIsInteracting:userIsInteraction blurPreviousNode:blurPreviousNode userObject:userObject];
 }
 
 

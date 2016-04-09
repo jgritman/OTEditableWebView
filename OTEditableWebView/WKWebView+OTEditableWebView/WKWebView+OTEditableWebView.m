@@ -10,7 +10,25 @@
 #import "OTWebKitObjectConverter.h"
 #import <objc/runtime.h>
 
+static char OTEditableWebViewCanActiveKeyboardWithoutUserInteractionKey;
+
 @implementation WKWebView (OTEditableWebView)
+
+#pragma mark - Additional Properties
+
+- (BOOL)canActiveKeyboardWithoutUserInteraction
+{
+    NSNumber *number = objc_getAssociatedObject(self, &OTEditableWebViewCanActiveKeyboardWithoutUserInteractionKey);
+    BOOL result = [number boolValue];
+    return result;
+}
+
+- (void)setCanActiveKeyboardWithoutUserInteraction:(BOOL)canActiveKeyboardWithoutUserInteraction
+{
+    objc_setAssociatedObject(self, &OTEditableWebViewCanActiveKeyboardWithoutUserInteractionKey, [NSNumber numberWithBool:canActiveKeyboardWithoutUserInteraction], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+#pragma mark - Evaluate javascript bridge
 
 - (void)evaluateJavaScriptWithOutCallback:(NSString *)javaScriptString
 {
@@ -38,6 +56,8 @@
     }
     return resultString;
 }
+
+#pragma mark - Public methods
 
 - (void)injectScriptText:(NSString *)scriptText
 {
@@ -355,8 +375,7 @@
         return NO;
     }
     
-#warning check if keyboardDisplayRequiresUserAction make sense
-//    self.keyboardDisplayRequiresUserAction = NO;
+    self.canActiveKeyboardWithoutUserInteraction = YES;
     
     NSString *elementFocusCommandFormat =
     @"(function(element_id)"

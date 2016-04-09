@@ -12,4 +12,9 @@
 
 @interface WKWebView (OTEditableWebView) <OTEditableWebViewProtocol, WKScriptMessageHandler>
 
+@property (nonatomic, assign) BOOL canActiveKeyboardWithoutUserInteraction;
+
+//adapter to UIWebView's `stringByEvaluatingJavaScriptFromString:`
+- (NSString *)stringByEvaluatingJavaScriptFromString:(NSString *)javaScriptString;
+
 @end
