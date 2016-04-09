@@ -7,6 +7,7 @@
 //
 
 #import "UIWebView+OTEditableWebView.h"
+#import "OTWebKitObjectConverter.h"
 #import <objc/runtime.h>
 
 @implementation UIWebView (OTEditableWebView)
@@ -52,7 +53,7 @@
 {
     NSString *const command = @"document.documentElement.offsetHeight";
     NSString *result = [self stringByEvaluatingJavaScriptFromString:command];
-    CGFloat height = [[self class] safeDoubleValueFromObject:result];
+    CGFloat height = [OTWebKitObjectConverter safeDoubleValueFromObject:result];
     return height;
 }
 
@@ -199,10 +200,10 @@
     @"})();";
     NSString* rectString = [self stringByEvaluatingJavaScriptFromString:command];
     NSDictionary *rectObject = [[self class] objectFromJSONString:rectString];
-    CGRect selectionRect = CGRectMake([[self class] safeDoubleValueFromObject:rectObject[@"left"]],
-                                      [[self class] safeDoubleValueFromObject:rectObject[@"top"]],
-                                      [[self class] safeDoubleValueFromObject:rectObject[@"width"]],
-                                      [[self class] safeDoubleValueFromObject:rectObject[@"height"]]);
+    CGRect selectionRect = CGRectMake([OTWebKitObjectConverter safeDoubleValueFromObject:rectObject[@"left"]],
+                                      [OTWebKitObjectConverter safeDoubleValueFromObject:rectObject[@"top"]],
+                                      [OTWebKitObjectConverter safeDoubleValueFromObject:rectObject[@"width"]],
+                                      [OTWebKitObjectConverter safeDoubleValueFromObject:rectObject[@"height"]]);
     return selectionRect;
 }
 
@@ -228,10 +229,10 @@
     @"})();";
     NSString* rectString = [self stringByEvaluatingJavaScriptFromString:command];
     NSDictionary *rectObject = [[self class] objectFromJSONString:rectString];
-    CGRect selectionRect = CGRectMake([[self class] safeDoubleValueFromObject:rectObject[@"left"]],
-                                      [[self class] safeDoubleValueFromObject:rectObject[@"top"]],
-                                      [[self class] safeDoubleValueFromObject:rectObject[@"width"]],
-                                      [[self class] safeDoubleValueFromObject:rectObject[@"height"]]);
+    CGRect selectionRect = CGRectMake([OTWebKitObjectConverter safeDoubleValueFromObject:rectObject[@"left"]],
+                                      [OTWebKitObjectConverter safeDoubleValueFromObject:rectObject[@"top"]],
+                                      [OTWebKitObjectConverter safeDoubleValueFromObject:rectObject[@"width"]],
+                                      [OTWebKitObjectConverter safeDoubleValueFromObject:rectObject[@"height"]]);
     return selectionRect;
 }
 
@@ -342,38 +343,6 @@
     
     [self stringByEvaluatingJavaScriptFromString:@"document.body.blur()"];
     return YES;
-}
-
-#pragma mark - Util methods
-
-+ (CGFloat)safeDoubleValueFromObject:(id)object
-{
-    if ([object respondsToSelector:@selector(doubleValue)])
-    {
-        return [object doubleValue];
-    }
-    return 0;
-}
-
-+ (id)objectFromJSONString:(NSString *)JSONString
-{
-    NSError *error = nil;
-    id ret = nil;
-    @try
-    {
-        NSData *data = [JSONString dataUsingEncoding:NSUTF8StringEncoding];
-        ret = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers | NSJSONReadingAllowFragments error:&error];
-    }
-    @catch (NSException *exception)
-    {
-        return nil;
-    }
-    
-    if (error)
-    {
-        return nil;
-    }
-    return ret;
 }
 
 @end
