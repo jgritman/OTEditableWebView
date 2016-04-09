@@ -25,17 +25,10 @@
         {
             resultString = @"";
         }
-        else if ([result isKindOfClass:[NSString class]])
-        {
-            resultString = result;
-        }
-        else if ([resultString isKindOfClass:[NSNull class]])
-        {
-            resultString = @"";
-        }
         else
         {
-            resultString = [result description];
+            resultString = [OTWebKitObjectConverter stringFromWebKitReturnedObject:result];
+            resultString = resultString ?: @"";
         }
         
     }];
@@ -245,7 +238,7 @@
     @"  var jsonString = JSON.stringify(resultObject);"
     @"  return jsonString;"
     @"})();";
-    NSString* rectString = [self stringByEvaluatingJavaScriptFromString:command];
+    NSString *rectString = [self stringByEvaluatingJavaScriptFromString:command];
     NSDictionary *rectObject = [OTWebKitObjectConverter objectFromJSONString:rectString];
     CGRect selectionRect = CGRectMake([OTWebKitObjectConverter safeDoubleValueFromObject:rectObject[@"left"]],
                                       [OTWebKitObjectConverter safeDoubleValueFromObject:rectObject[@"top"]],
