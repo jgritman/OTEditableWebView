@@ -396,6 +396,18 @@
     return @"OTEditableWebViewCallbackHandler";
 }
 
+- (NSMutableDictionary<NSString *, void(^)(void)> *)callbackContainer
+{
+    static char callbackContainerKey;
+    NSMutableDictionary *dictionary = objc_getAssociatedObject(self, &callbackContainerKey);
+    if (!dictionary)
+    {
+        dictionary = [NSMutableDictionary dictionary];
+        objc_setAssociatedObject(self, &callbackContainerKey, dictionary, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    return dictionary;
+}
+
 - (void)registerSelfAsWebKitHandlerIfNotRegistered
 {
     static char hasAddedKey;
@@ -412,8 +424,11 @@
 - (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message
 {
     NSString *messageString = [OTWebKitObjectConverter stringFromWebKitReturnedObject:message.body];
-    NSLog(@"message: %@", messageString);
-#warning callback
+    void (^callback)(void) = [self callbackContainer][messageString];
+    if (callback)
+    {
+        callback();
+    }
 }
 
 @end
