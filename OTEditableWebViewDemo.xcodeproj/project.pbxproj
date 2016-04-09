@@ -13,6 +13,7 @@
 		4227C3731CB8B3B000EFB084 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4227C3721CB8B3B000EFB084 /* WebKit.framework */; };
 		4227C3761CB8B8D600EFB084 /* WKWebViewDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4227C3751CB8B8D600EFB084 /* WKWebViewDemoViewController.m */; };
 		4227C3891CB9057900EFB084 /* OTWebKitObjectConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4227C3881CB9057900EFB084 /* OTWebKitObjectConverter.m */; };
+		4227C39D1CB966C100EFB084 /* UIView+OTWebContentViewActiveKeyboardHack.m in Sources */ = {isa = PBXBuildFile; fileRef = 4227C39C1CB966C100EFB084 /* UIView+OTWebContentViewActiveKeyboardHack.m */; };
 		42EDAE811CAD2C0E0016E0FD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EDAE801CAD2C0E0016E0FD /* main.m */; };
 		42EDAE841CAD2C0E0016E0FD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EDAE831CAD2C0E0016E0FD /* AppDelegate.m */; };
 		42EDAE871CAD2C0E0016E0FD /* UIWebViewDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EDAE861CAD2C0E0016E0FD /* UIWebViewDemoViewController.m */; };
@@ -32,6 +33,8 @@
 		4227C3751CB8B8D600EFB084 /* WKWebViewDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKWebViewDemoViewController.m; sourceTree = "<group>"; };
 		4227C3871CB9057900EFB084 /* OTWebKitObjectConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTWebKitObjectConverter.h; sourceTree = "<group>"; };
 		4227C3881CB9057900EFB084 /* OTWebKitObjectConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTWebKitObjectConverter.m; sourceTree = "<group>"; };
+		4227C39B1CB966C100EFB084 /* UIView+OTWebContentViewActiveKeyboardHack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+OTWebContentViewActiveKeyboardHack.h"; sourceTree = "<group>"; };
+		4227C39C1CB966C100EFB084 /* UIView+OTWebContentViewActiveKeyboardHack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+OTWebContentViewActiveKeyboardHack.m"; sourceTree = "<group>"; };
 		42EDAE7C1CAD2C0E0016E0FD /* OTEditableWebViewDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OTEditableWebViewDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42EDAE801CAD2C0E0016E0FD /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		42EDAE821CAD2C0E0016E0FD /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -70,6 +73,8 @@
 			children = (
 				4227C36D1CB8B36C00EFB084 /* WKWebView+OTEditableWebView.h */,
 				4227C36E1CB8B36C00EFB084 /* WKWebView+OTEditableWebView.m */,
+				4227C39B1CB966C100EFB084 /* UIView+OTWebContentViewActiveKeyboardHack.h */,
+				4227C39C1CB966C100EFB084 /* UIView+OTWebContentViewActiveKeyboardHack.m */,
 			);
 			path = "WKWebView+OTEditableWebView";
 			sourceTree = "<group>";
@@ -212,6 +217,7 @@
 				42EDAE841CAD2C0E0016E0FD /* AppDelegate.m in Sources */,
 				4227C36A1CB8B2DE00EFB084 /* UIWebView+OTEditableWebView.m in Sources */,
 				42EDAE811CAD2C0E0016E0FD /* main.m in Sources */,
+				4227C39D1CB966C100EFB084 /* UIView+OTWebContentViewActiveKeyboardHack.m in Sources */,
 				4227C3761CB8B8D600EFB084 /* WKWebViewDemoViewController.m in Sources */,
 				4227C3891CB9057900EFB084 /* OTWebKitObjectConverter.m in Sources */,
 			);
