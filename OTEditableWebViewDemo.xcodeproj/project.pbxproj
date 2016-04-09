@@ -7,15 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4227C36A1CB8B2DE00EFB084 /* UIWebView+OTEditableWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4227C3691CB8B2DE00EFB084 /* UIWebView+OTEditableWebView.m */; };
 		42EDAE811CAD2C0E0016E0FD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EDAE801CAD2C0E0016E0FD /* main.m */; };
 		42EDAE841CAD2C0E0016E0FD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EDAE831CAD2C0E0016E0FD /* AppDelegate.m */; };
 		42EDAE871CAD2C0E0016E0FD /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EDAE861CAD2C0E0016E0FD /* ViewController.m */; };
 		42EDAE8C1CAD2C0E0016E0FD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42EDAE8B1CAD2C0E0016E0FD /* Assets.xcassets */; };
 		42EDAE8F1CAD2C0E0016E0FD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42EDAE8D1CAD2C0E0016E0FD /* LaunchScreen.storyboard */; };
-		42EDAE991CAD2C630016E0FD /* UIWebView+OTEditableWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EDAE981CAD2C630016E0FD /* UIWebView+OTEditableWebView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4227C3681CB8B2DE00EFB084 /* UIWebView+OTEditableWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWebView+OTEditableWebView.h"; sourceTree = "<group>"; };
+		4227C3691CB8B2DE00EFB084 /* UIWebView+OTEditableWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWebView+OTEditableWebView.m"; sourceTree = "<group>"; };
+		4227C36B1CB8B2F200EFB084 /* OTEditableWebViewProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTEditableWebViewProtocol.h; sourceTree = "<group>"; };
 		42EDAE7C1CAD2C0E0016E0FD /* OTEditableWebViewDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OTEditableWebViewDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42EDAE801CAD2C0E0016E0FD /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		42EDAE821CAD2C0E0016E0FD /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -25,8 +28,6 @@
 		42EDAE8B1CAD2C0E0016E0FD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		42EDAE8E1CAD2C0E0016E0FD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		42EDAE901CAD2C0E0016E0FD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		42EDAE971CAD2C630016E0FD /* UIWebView+OTEditableWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWebView+OTEditableWebView.h"; sourceTree = "<group>"; };
-		42EDAE981CAD2C630016E0FD /* UIWebView+OTEditableWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWebView+OTEditableWebView.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -40,6 +41,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4227C3671CB8B2DE00EFB084 /* UIWebView+OTEditableWebView */ = {
+			isa = PBXGroup;
+			children = (
+				4227C3681CB8B2DE00EFB084 /* UIWebView+OTEditableWebView.h */,
+				4227C3691CB8B2DE00EFB084 /* UIWebView+OTEditableWebView.m */,
+			);
+			path = "UIWebView+OTEditableWebView";
+			sourceTree = "<group>";
+		};
 		42EDAE731CAD2C0E0016E0FD = {
 			isa = PBXGroup;
 			children = (
@@ -83,8 +93,8 @@
 		42EDAE961CAD2C260016E0FD /* OTEditableWebView */ = {
 			isa = PBXGroup;
 			children = (
-				42EDAE971CAD2C630016E0FD /* UIWebView+OTEditableWebView.h */,
-				42EDAE981CAD2C630016E0FD /* UIWebView+OTEditableWebView.m */,
+				4227C36B1CB8B2F200EFB084 /* OTEditableWebViewProtocol.h */,
+				4227C3671CB8B2DE00EFB084 /* UIWebView+OTEditableWebView */,
 			);
 			path = OTEditableWebView;
 			sourceTree = "<group>";
@@ -158,9 +168,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				42EDAE991CAD2C630016E0FD /* UIWebView+OTEditableWebView.m in Sources */,
 				42EDAE871CAD2C0E0016E0FD /* ViewController.m in Sources */,
 				42EDAE841CAD2C0E0016E0FD /* AppDelegate.m in Sources */,
+				4227C36A1CB8B2DE00EFB084 /* UIWebView+OTEditableWebView.m in Sources */,
 				42EDAE811CAD2C0E0016E0FD /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

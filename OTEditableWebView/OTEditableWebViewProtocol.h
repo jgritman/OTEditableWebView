@@ -1,15 +1,14 @@
 //
-//  UIWebView+OTEditableWebView.h
+//  OTEditableWebViewProtocol.h
 //  OTEditableWebViewDemo
 //
-//  Created by openthread on 3/31/16.
+//  Created by openthread on 4/9/16.
 //  Copyright © 2016 openthread. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import <JavaScriptCore/JavaScriptCore.h>
+#import <Foundation/Foundation.h>
 
-@interface UIWebView (OTEditableWebView)
+@protocol OTEditableWebViewProtocol <NSObject>
 
 /**
  *  Inject a javascript paragraph to HTML header.
