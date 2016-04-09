@@ -14,4 +14,8 @@
 
 + (id)objectFromJSONString:(NSString *)JSONString;
 
++ (NSString *)JSONStringFromObject:(id)object;
+
++ (NSString *)stringFromWebKitReturnedObject:(id)webKitReturnedObject;
+
 @end
