@@ -173,26 +173,28 @@
 
 - (void)setContentFocusOutCallback:(void (^)(void))contentFocusOutCallback
 {
-#warning unfinished
-    return;
-    JSContext *context = [self valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
+    [self registerSelfAsWebKitHandlerIfNotRegistered];
     
     NSString *const eventName = @"focusout";
-    NSString *const callbackKey = @"OTWebViewBodyFocusOutEventCallback";
-    NSString *addCommand = [NSString stringWithFormat:@"document.body.addEventListener('%@', %@, false);", eventName, callbackKey];
-    NSString *removeCommand = [NSString stringWithFormat:@"document.body.removeEventListener('%@', %@, false);", eventName, callbackKey];
+    NSString *const functionName = @"otwebview_body_focusout_event_callback";
+    NSString *const callbackCommandFormat =
+    @"var %@ = function () {"//fuction name
+    @"  var messageToPost = '%@';"//event name, used to save callback as key in callback container
+    @"  window.webkit.messageHandlers.%@.postMessage(messageToPost);"//message handler name
+    @"};";
+    NSString *const callbackCommand = [NSString stringWithFormat:callbackCommandFormat, functionName, eventName, [[self class] webkitCallbackHandlerName]];
+    
+    NSString *addCommand = [NSString stringWithFormat:@"%@ document.body.addEventListener('%@', %@, false);", callbackCommand, eventName, functionName];
+    NSString *removeCommand = [NSString stringWithFormat:@"document.body.removeEventListener('%@', %@, false);", eventName, functionName];
     
     //remove old handler
-    [context evaluateScript:removeCommand];
-    context[callbackKey] = nil;
+    [self evaluateJavaScriptWithOutCallback:removeCommand];
     
     //if new handler exist, add new handler
     if (contentFocusOutCallback)
     {
-        context[callbackKey] = ^(JSValue *msg) {
-            contentFocusOutCallback();
-        };
-        [context evaluateScript:addCommand];
+        [self callbackContainer][eventName] = [contentFocusOutCallback copy];
+        [self evaluateJavaScriptWithOutCallback:addCommand];
     }
 }
 
