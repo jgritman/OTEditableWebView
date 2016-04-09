@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		4227C36A1CB8B2DE00EFB084 /* UIWebView+OTEditableWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4227C3691CB8B2DE00EFB084 /* UIWebView+OTEditableWebView.m */; };
+		4227C36F1CB8B36C00EFB084 /* WKWebView+OTEditableWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4227C36E1CB8B36C00EFB084 /* WKWebView+OTEditableWebView.m */; };
+		4227C3711CB8B3AC00EFB084 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4227C3701CB8B3AC00EFB084 /* JavaScriptCore.framework */; };
+		4227C3731CB8B3B000EFB084 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4227C3721CB8B3B000EFB084 /* WebKit.framework */; };
 		42EDAE811CAD2C0E0016E0FD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EDAE801CAD2C0E0016E0FD /* main.m */; };
 		42EDAE841CAD2C0E0016E0FD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EDAE831CAD2C0E0016E0FD /* AppDelegate.m */; };
 		42EDAE871CAD2C0E0016E0FD /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42EDAE861CAD2C0E0016E0FD /* ViewController.m */; };
@@ -19,6 +22,10 @@
 		4227C3681CB8B2DE00EFB084 /* UIWebView+OTEditableWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWebView+OTEditableWebView.h"; sourceTree = "<group>"; };
 		4227C3691CB8B2DE00EFB084 /* UIWebView+OTEditableWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWebView+OTEditableWebView.m"; sourceTree = "<group>"; };
 		4227C36B1CB8B2F200EFB084 /* OTEditableWebViewProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTEditableWebViewProtocol.h; sourceTree = "<group>"; };
+		4227C36D1CB8B36C00EFB084 /* WKWebView+OTEditableWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WKWebView+OTEditableWebView.h"; sourceTree = "<group>"; };
+		4227C36E1CB8B36C00EFB084 /* WKWebView+OTEditableWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WKWebView+OTEditableWebView.m"; sourceTree = "<group>"; };
+		4227C3701CB8B3AC00EFB084 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		4227C3721CB8B3B000EFB084 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		42EDAE7C1CAD2C0E0016E0FD /* OTEditableWebViewDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OTEditableWebViewDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42EDAE801CAD2C0E0016E0FD /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		42EDAE821CAD2C0E0016E0FD /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -35,6 +42,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4227C3731CB8B3B000EFB084 /* WebKit.framework in Frameworks */,
+				4227C3711CB8B3AC00EFB084 /* JavaScriptCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -50,9 +59,20 @@
 			path = "UIWebView+OTEditableWebView";
 			sourceTree = "<group>";
 		};
+		4227C36C1CB8B35600EFB084 /* WKWebView+OTEditableWebView */ = {
+			isa = PBXGroup;
+			children = (
+				4227C36D1CB8B36C00EFB084 /* WKWebView+OTEditableWebView.h */,
+				4227C36E1CB8B36C00EFB084 /* WKWebView+OTEditableWebView.m */,
+			);
+			path = "WKWebView+OTEditableWebView";
+			sourceTree = "<group>";
+		};
 		42EDAE731CAD2C0E0016E0FD = {
 			isa = PBXGroup;
 			children = (
+				4227C3721CB8B3B000EFB084 /* WebKit.framework */,
+				4227C3701CB8B3AC00EFB084 /* JavaScriptCore.framework */,
 				42EDAE961CAD2C260016E0FD /* OTEditableWebView */,
 				42EDAE7E1CAD2C0E0016E0FD /* OTEditableWebViewDemo */,
 				42EDAE7D1CAD2C0E0016E0FD /* Products */,
@@ -94,6 +114,7 @@
 			isa = PBXGroup;
 			children = (
 				4227C36B1CB8B2F200EFB084 /* OTEditableWebViewProtocol.h */,
+				4227C36C1CB8B35600EFB084 /* WKWebView+OTEditableWebView */,
 				4227C3671CB8B2DE00EFB084 /* UIWebView+OTEditableWebView */,
 			);
 			path = OTEditableWebView;
@@ -169,6 +190,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				42EDAE871CAD2C0E0016E0FD /* ViewController.m in Sources */,
+				4227C36F1CB8B36C00EFB084 /* WKWebView+OTEditableWebView.m in Sources */,
 				42EDAE841CAD2C0E0016E0FD /* AppDelegate.m in Sources */,
 				4227C36A1CB8B2DE00EFB084 /* UIWebView+OTEditableWebView.m in Sources */,
 				42EDAE811CAD2C0E0016E0FD /* main.m in Sources */,
