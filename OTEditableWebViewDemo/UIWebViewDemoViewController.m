@@ -6,16 +6,16 @@
 //  Copyright © 2016 openthread. All rights reserved.
 //
 
-#import "ViewController.h"
+#import "UIWebViewDemoViewController.h"
 #import "UIWebView+OTEditableWebView.h"
 
-@interface ViewController () <UIWebViewDelegate, UITextViewDelegate>
+@interface UIWebViewDemoViewController () <UIWebViewDelegate>
 @property (nonatomic, strong) UIButton *toggleEditableButton;
 @property (nonatomic, strong) UIButton *logHTMLSourceCodeButton;
 @property (nonatomic, strong) UIWebView *webView;
 @end
 
-@implementation ViewController
+@implementation UIWebViewDemoViewController
 
 - (instancetype)init
 {
@@ -26,6 +26,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.title = @"UI";
     
     self.toggleEditableButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.toggleEditableButton addTarget:self action:@selector(toggleEditable) forControlEvents:UIControlEventTouchUpInside];

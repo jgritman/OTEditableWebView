@@ -7,7 +7,8 @@
 //
 
 #import "AppDelegate.h"
-#import "ViewController.h"
+#import "UIWebViewDemoViewController.h"
+#import "WKWebViewDemoViewController.h"
 
 @interface AppDelegate ()
 
@@ -21,7 +22,10 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
 
-    self.window.rootViewController = [[ViewController alloc] init];
+    UITabBarController *tabBarController = [[UITabBarController alloc] init];
+    tabBarController.viewControllers = @[[[WKWebViewDemoViewController alloc] init],
+                                         [[UIWebViewDemoViewController alloc] init]];
+    self.window.rootViewController = tabBarController;
     [self.window makeKeyAndVisible];
     return YES;
 }
