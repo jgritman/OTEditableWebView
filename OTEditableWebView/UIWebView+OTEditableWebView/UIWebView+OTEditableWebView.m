@@ -199,7 +199,7 @@
     @"  return jsonString;"
     @"})();";
     NSString* rectString = [self stringByEvaluatingJavaScriptFromString:command];
-    NSDictionary *rectObject = [[self class] objectFromJSONString:rectString];
+    NSDictionary *rectObject = [OTWebKitObjectConverter objectFromJSONString:rectString];
     CGRect selectionRect = CGRectMake([OTWebKitObjectConverter safeDoubleValueFromObject:rectObject[@"left"]],
                                       [OTWebKitObjectConverter safeDoubleValueFromObject:rectObject[@"top"]],
                                       [OTWebKitObjectConverter safeDoubleValueFromObject:rectObject[@"width"]],
@@ -228,7 +228,7 @@
     @"  return jsonString;"
     @"})();";
     NSString* rectString = [self stringByEvaluatingJavaScriptFromString:command];
-    NSDictionary *rectObject = [[self class] objectFromJSONString:rectString];
+    NSDictionary *rectObject = [OTWebKitObjectConverter objectFromJSONString:rectString];
     CGRect selectionRect = CGRectMake([OTWebKitObjectConverter safeDoubleValueFromObject:rectObject[@"left"]],
                                       [OTWebKitObjectConverter safeDoubleValueFromObject:rectObject[@"top"]],
                                       [OTWebKitObjectConverter safeDoubleValueFromObject:rectObject[@"width"]],

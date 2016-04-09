@@ -96,7 +96,6 @@
 
 - (void)logHTMLEditingInfo
 {
-    [self.webView beginInput];
     NSLog(@"Is body focused: %d", [self.webView isBodyFocused]);
     NSLog(@"Selection rect: %@", NSStringFromCGRect([self.webView selectionRectInWebView]));
     NSLog(@"HTML source code: %@", [self.webView allHTMLSourceCode]);

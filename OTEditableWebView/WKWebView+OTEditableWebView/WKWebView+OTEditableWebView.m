@@ -246,7 +246,7 @@
     @"  return jsonString;"
     @"})();";
     NSString* rectString = [self stringByEvaluatingJavaScriptFromString:command];
-    NSDictionary *rectObject = [[self class] objectFromJSONString:rectString];
+    NSDictionary *rectObject = [OTWebKitObjectConverter objectFromJSONString:rectString];
     CGRect selectionRect = CGRectMake([OTWebKitObjectConverter safeDoubleValueFromObject:rectObject[@"left"]],
                                       [OTWebKitObjectConverter safeDoubleValueFromObject:rectObject[@"top"]],
                                       [OTWebKitObjectConverter safeDoubleValueFromObject:rectObject[@"width"]],
@@ -275,7 +275,7 @@
     @"  return jsonString;"
     @"})();";
     NSString* rectString = [self stringByEvaluatingJavaScriptFromString:command];
-    NSDictionary *rectObject = [[self class] objectFromJSONString:rectString];
+    NSDictionary *rectObject = [OTWebKitObjectConverter objectFromJSONString:rectString];
     CGRect selectionRect = CGRectMake([OTWebKitObjectConverter safeDoubleValueFromObject:rectObject[@"left"]],
                                       [OTWebKitObjectConverter safeDoubleValueFromObject:rectObject[@"top"]],
                                       [OTWebKitObjectConverter safeDoubleValueFromObject:rectObject[@"width"]],
@@ -285,44 +285,56 @@
 
 - (void)beginObserveIsBodyFocused
 {
-#warning unfinished
-    return;
-    JSContext *context = [self valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
+    [self registerSelfAsWebKitHandlerIfNotRegistered];
     
     __weak typeof (self) weakSelf = self;
     //add focus in event
     {
-        NSString *const focusInEventName = @"focusin";
-        NSString *const focusInCallbackKey = @"OTWebViewBodyIsFocusedFocusInCallback";
-        NSString *addFocusInCommand = [NSString stringWithFormat:@"document.body.addEventListener('%@', %@, false);", focusInEventName, focusInCallbackKey];
-        NSString *removeFocusInCommand = [NSString stringWithFormat:@"document.body.removeEventListener('%@', %@, false);", focusInEventName, focusInCallbackKey];
+        NSString *const eventName = @"focusin";
+        NSString *const callbackKey = @"beginObserveIsBodyFocused_FocusIn";
+        NSString *const functionName = @"otwebview_observe_is_body_focused_focusin_callback";
+        NSString *const callbackCommandFormat =
+        @"var %@ = function () {"//fuction name
+        @"  var messageToPost = '%@';"//save callback as key in callback container
+        @"  window.webkit.messageHandlers.%@.postMessage(messageToPost);"//message handler name
+        @"};";
+        NSString *const callbackCommand = [NSString stringWithFormat:callbackCommandFormat, functionName, callbackKey, [[self class] webkitCallbackHandlerName]];
+
+        NSString *addCommand = [NSString stringWithFormat:@"%@ document.body.addEventListener('%@', %@, false);", callbackCommand, eventName, functionName];
+        NSString *removeCommand = [NSString stringWithFormat:@"document.body.removeEventListener('%@', %@, false);", eventName, functionName];
         
         //remove old handler
-        [context evaluateScript:removeFocusInCommand];
-        context[focusInCallbackKey] = nil;
-        
+        [self evaluateJavaScriptWithOutCallback:removeCommand];
+
         //add new handler
-        context[focusInCallbackKey] = ^(JSValue *msg) {
+        [self callbackContainer][callbackKey] = ^() {
             [weakSelf setIsBodyFocused:YES];
         };
-        [context evaluateScript:addFocusInCommand];
+        [self evaluateJavaScriptWithOutCallback:addCommand];
     }
     
     {
-        NSString *const focusOutEventName = @"focusout";
-        NSString *const focusOutCallbackKey = @"OTWebViewBodyIsFocusedFocusOutCallback";
-        NSString *addFocusOutCommand = [NSString stringWithFormat:@"document.body.addEventListener('%@', %@, false);", focusOutEventName, focusOutCallbackKey];
-        NSString *removeFocusOutCommand = [NSString stringWithFormat:@"document.body.removeEventListener('%@', %@, false);", focusOutEventName, focusOutCallbackKey];
+        NSString *const eventName = @"focusout";
+        NSString *const callbackKey = @"beginObserveIsBodyFocused_FocusOut";
+        NSString *const functionName = @"otwebview_observe_is_body_focused_focusout_callback";
+        NSString *const callbackCommandFormat =
+        @"var %@ = function () {"//fuction name
+        @"  var messageToPost = '%@';"//save callback as key in callback container
+        @"  window.webkit.messageHandlers.%@.postMessage(messageToPost);"//message handler name
+        @"};";
+        NSString *const callbackCommand = [NSString stringWithFormat:callbackCommandFormat, functionName, callbackKey, [[self class] webkitCallbackHandlerName]];
+
+        NSString *addCommand = [NSString stringWithFormat:@"%@ document.body.addEventListener('%@', %@, false);", callbackCommand, eventName, functionName];
+        NSString *removeCommand = [NSString stringWithFormat:@"document.body.removeEventListener('%@', %@, false);", eventName, functionName];
         
         //remove old handler
-        [context evaluateScript:removeFocusOutCommand];
-        context[focusOutCallbackKey] = nil;
+        [self evaluateJavaScriptWithOutCallback:removeCommand];
         
         //add new handler
-        context[focusOutCallbackKey] = ^(JSValue *msg) {
+        [self callbackContainer][callbackKey] = ^() {
             [weakSelf setIsBodyFocused:NO];
         };
-        [context evaluateScript:addFocusOutCommand];
+        [self evaluateJavaScriptWithOutCallback:addCommand];
     }
 }
 
