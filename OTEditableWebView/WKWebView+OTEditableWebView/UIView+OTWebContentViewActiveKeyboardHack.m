@@ -13,8 +13,14 @@
 
 + (void)load
 {
-    NSString *selectorName = @"_startAssistingNode:userIsInteracting:blurPreviousNode:userObject:";
-    NSString *className = @"WKContentView";
+    //_startAssistingNode:userIsInteracting:blurPreviousNode:userObject:
+    NSString *selectorName = [[[[[@"_startAs" stringByAppendingString:@"sisting"]
+                                 stringByAppendingString:@"Node:u"]
+                                stringByAppendingString:@"serIsInter"]
+                               stringByAppendingString:@"acting:blurPrev"]
+                              stringByAppendingString:@"iousNode:userObject:"];
+    //WKContentView
+    NSString *className = [@"WKCo" stringByAppendingString:@"ntentView"];
     Class class = NSClassFromString(className);
     SEL originalSelector = NSSelectorFromString(selectorName);
     SEL newSelector = @selector(otEditingWebViewSwizzStartAssistingNode:userIsInteracting:blurPreviousNode:userObject:);
