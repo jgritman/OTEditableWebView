@@ -10,6 +10,6 @@
 #import <JavaScriptCore/JavaScriptCore.h>
 #import "OTEditableWebViewProtocol.h"
 
-@interface WKWebView (OTEditableWebView) <OTEditableWebViewProtocol>
+@interface WKWebView (OTEditableWebView) <OTEditableWebViewProtocol, WKScriptMessageHandler>
 
 @end

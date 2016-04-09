@@ -7,6 +7,7 @@
 //
 
 #import "WKWebView+OTEditableWebView.h"
+#import "OTWebKitObjectConverter.h"
 #import <objc/runtime.h>
 
 @implementation WKWebView (OTEditableWebView)
@@ -117,34 +118,33 @@
 
 - (void)setContentInputCallback:(void (^)(JSValue *msg))contentInputCallback
 {
-#warning unfinished
-    [self addMessageHandlerIfNotExist:@"aa"];
-    return;
-    JSContext *context = [self valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
+    [self registerSelfAsWebKitHandlerIfNotRegistered];
     
+#warning unfinished
     NSString *const eventName = @"input";
-    NSString *const callbackKey = @"OTWebViewBodyInputEventCallback";
-    NSString *addCommand = [NSString stringWithFormat:@"document.body.addEventListener('%@', %@, false);", eventName, callbackKey];
-    NSString *removeCommand = [NSString stringWithFormat:@"document.body.removeEventListener('%@', %@, false);", eventName, callbackKey];
+    NSString *const callbackName = @"otwebview_body_input_event_callback";
+    NSString *const callbackCommandFormat =
+    @"var %@ = function () {"//fuction name
+    @"  var messageToPost = 'input';"
+    @"  window.webkit.messageHandlers.%@.postMessage(messageToPost);"//message handler key
+    @"};";
+    NSString *const callbackCommand = [NSString stringWithFormat:callbackCommandFormat, callbackName, [[self class] webkitCallbackHandlerName]];
+    NSString *addCommand = [NSString stringWithFormat:@"%@ document.body.addEventListener('%@', %@, false);", callbackCommand, eventName, callbackName];
+    NSString *removeCommand = [NSString stringWithFormat:@"document.body.removeEventListener('%@', %@, false);", eventName, callbackName];
     
     //remove old handler
-    [context evaluateScript:removeCommand];
-    context[callbackKey] = nil;
+    [self evaluateJavaScriptWithOutCallback:removeCommand];
     
     //if new handler exist, add new handler
     if (contentInputCallback)
     {
-        context[callbackKey] = ^(JSValue *msg) {
-            contentInputCallback(msg);
-        };
-        [context evaluateScript:addCommand];
+        [self evaluateJavaScriptWithOutCallback:addCommand];
     }
 }
 
 - (void)setContentFocusInCallback:(void (^)(JSValue *msg))contentFocusCallback
 {
 #warning unfinished
-    [self addMessageHandlerIfNotExist:@"aa"];
     return;
     JSContext *context = [self valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
     
@@ -170,7 +170,6 @@
 - (void)setContentFocusOutCallback:(void (^)(JSValue *msg))contentFocusOutCallback
 {
 #warning unfinished
-    [self addMessageHandlerIfNotExist:@"aa"];
     return;
     JSContext *context = [self valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
     
@@ -271,17 +270,16 @@
     @"})();";
     NSString* rectString = [self stringByEvaluatingJavaScriptFromString:command];
     NSDictionary *rectObject = [[self class] objectFromJSONString:rectString];
-    CGRect selectionRect = CGRectMake([[self class] safeDoubleValueFromObject:rectObject[@"left"]],
-                                      [[self class] safeDoubleValueFromObject:rectObject[@"top"]],
-                                      [[self class] safeDoubleValueFromObject:rectObject[@"width"]],
-                                      [[self class] safeDoubleValueFromObject:rectObject[@"height"]]);
+    CGRect selectionRect = CGRectMake([OTWebKitObjectConverter safeDoubleValueFromObject:rectObject[@"left"]],
+                                      [OTWebKitObjectConverter safeDoubleValueFromObject:rectObject[@"top"]],
+                                      [OTWebKitObjectConverter safeDoubleValueFromObject:rectObject[@"width"]],
+                                      [OTWebKitObjectConverter safeDoubleValueFromObject:rectObject[@"height"]]);
     return selectionRect;
 }
 
 - (void)beginObserveIsBodyFocused
 {
 #warning unfinished
-    [self addMessageHandlerIfNotExist:@"aa"];
     return;
     JSContext *context = [self valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
     
@@ -393,44 +391,29 @@
 
 #pragma mark - Message Handler Methods
 
-- (void)addMessageHandlerIfNotExist:(NSString *)handlerName
++ (NSString *)webkitCallbackHandlerName
 {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        [self.configuration.userContentController addScriptMessageHandler:self name:@"aa"];
-    });
+    return @"OTEditableWebViewCallbackHandler";
 }
 
-#pragma mark - Util methods
-
-+ (CGFloat)safeDoubleValueFromObject:(id)object
+- (void)registerSelfAsWebKitHandlerIfNotRegistered
 {
-    if ([object respondsToSelector:@selector(doubleValue)])
+    static char hasAddedKey;
+    NSNumber *added = objc_getAssociatedObject(self, &hasAddedKey);
+    if (!added)
     {
-        return [object doubleValue];
+        NSString *handlerName = [[self class] webkitCallbackHandlerName];
+        [self.configuration.userContentController removeScriptMessageHandlerForName:handlerName];
+        [self.configuration.userContentController addScriptMessageHandler:self name:handlerName];
+        objc_setAssociatedObject(self, &hasAddedKey, @YES, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
-    return 0;
 }
 
-+ (id)objectFromJSONString:(NSString *)JSONString
+- (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message
 {
-    NSError *error = nil;
-    id ret = nil;
-    @try
-    {
-        NSData *data = [JSONString dataUsingEncoding:NSUTF8StringEncoding];
-        ret = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers | NSJSONReadingAllowFragments error:&error];
-    }
-    @catch (NSException *exception)
-    {
-        return nil;
-    }
-    
-    if (error)
-    {
-        return nil;
-    }
-    return ret;
+    NSString *messageString = [OTWebKitObjectConverter stringFromWebKitReturnedObject:message.body];
+    NSLog(@"message: %@", messageString);
+#warning callback
 }
 
 @end
