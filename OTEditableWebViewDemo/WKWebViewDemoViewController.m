@@ -58,7 +58,10 @@
 
 - (void)loadTestContent
 {
-    NSString *urlString = @"https://www.google.com";
+    NSString *urlString = nil;
+//    urlString = @"file:///Users/openthread/Desktop/1.html";
+//    urlString = @"file:///Users/openthread/Desktop/2.html";
+    urlString = @"https://www.google.com";
     [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlString]]];
 }
 
