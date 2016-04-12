@@ -20,14 +20,16 @@
 - (instancetype)init
 {
     self = [super initWithNibName:nil bundle:nil];
+    if (self)
+    {
+        self.title = @"UIWebView";
+    }
     return self;
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    self.title = @"UI";
     
     self.toggleEditableButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.toggleEditableButton addTarget:self action:@selector(toggleEditable) forControlEvents:UIControlEventTouchUpInside];
@@ -52,7 +54,7 @@
 {
     self.toggleEditableButton.frame = CGRectMake(0, 20, CGRectGetWidth(self.view.frame) / 2, 44);
     self.logHTMLSourceCodeButton.frame = CGRectMake(CGRectGetWidth(self.view.frame) / 2, 20, CGRectGetWidth(self.view.frame) / 2, 44);
-    self.webView.frame = CGRectMake(0, CGRectGetMaxY(self.toggleEditableButton.frame), CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - CGRectGetMaxY(self.toggleEditableButton.frame));
+    self.webView.frame = CGRectMake(0, CGRectGetMaxY(self.toggleEditableButton.frame), CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - CGRectGetMaxY(self.toggleEditableButton.frame) - 49);
 }
 
 - (void)loadTestContent
