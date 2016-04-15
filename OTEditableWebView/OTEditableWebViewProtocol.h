@@ -45,6 +45,17 @@
  */
 @property (nonatomic, readonly) CGFloat documentHeight;
 
+
+/**
+ *  Get document native height (documentHeight / devicePixelRatio).
+ */
+@property (nonatomic, readonly) CGFloat documentHeightInDevice;
+
+/**
+ *  Get expected min document native height. Should equal to (documentHeight / devicePixelRatio) when web view height smaller than document height.
+ */
+@property (nonatomic, readonly) CGFloat expectedMinDocumentHeightInDevice;
+
 /**
  *  Set editable/uneditable, or get editable status.
  */

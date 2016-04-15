@@ -57,6 +57,58 @@
     return height;
 }
 
+- (CGFloat)documentHeightInDevice
+{
+    NSString *const command = @"document.documentElement.offsetHeight / window.devicePixelRatio";
+    NSString *result = [self stringByEvaluatingJavaScriptFromString:command];
+    CGFloat height = [OTWebKitObjectConverter safeDoubleValueFromObject:result];
+    return height;
+}
+
+- (CGFloat)expectedMinDocumentHeightInDevice
+{
+    NSString *const command =
+    @"(function ()"
+    @"{"
+    @"  function safeParseInt(string)"
+    @"  {"
+    @"      return document.documentElement.style.marginTop.length ? parseInt(document.documentElement.style.marginTop) : 0;"
+    @"  };"
+    @"  var nodes = document.body.childNodes;"
+    @"  var bottomDiv;"
+    @"  for (var i=0,len=nodes.length; i<len; i++)"
+    @"  {"
+    @"      var div = nodes[i];"
+    @"      if (div.offsetTop!=undefined)"
+    @"      {"
+    @"          if(!bottomDiv)"
+    @"          {"
+    @"              bottomDiv = div;"
+    @"          }"
+    @"          if(div.getBoundingClientRect().bottom > bottomDiv.getBoundingClientRect().bottom)"
+    @"          {"
+    @"              bottomDiv = div;"
+    @"          }"
+    @"      }"
+    @"  }"
+    
+    @"  var documentHeight ="
+    @"  window.pageYOffset +"
+    @"  bottomDiv.getBoundingClientRect().bottom +"
+    @"  safeParseInt(bottomDiv.style.marginBottom) +"
+    @"  safeParseInt(document.body.style.paddingBottom) +"
+    @"  safeParseInt(document.body.style.marginBottom) +"
+    @"  safeParseInt(document.documentElement.style.paddingBottom);"
+    
+    @"  var documentHeightInDevice = documentHeight / window.devicePixelRatio;"
+    @"  return documentHeightInDevice;"
+    @"})();";
+    
+    NSString *result = [self stringByEvaluatingJavaScriptFromString:command];
+    CGFloat height = [OTWebKitObjectConverter safeDoubleValueFromObject:result];
+    return height;
+}
+
 - (BOOL)bodyContentEditable
 {
     NSString *const command = @"document.body.getAttribute(\"contenteditable\")";
