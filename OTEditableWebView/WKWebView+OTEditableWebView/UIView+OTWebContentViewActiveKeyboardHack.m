@@ -14,18 +14,33 @@
 
 + (void)load
 {
-    //_startAssistingNode:userIsInteracting:blurPreviousNode:userObject:
-    NSString *selectorName = [[[[[@"_startAs" stringByAppendingString:@"sisting"]
-                                 stringByAppendingString:@"Node:u"]
-                                stringByAppendingString:@"serIsInter"]
-                               stringByAppendingString:@"acting:blurPrev"]
-                              stringByAppendingString:@"iousNode:userObject:"];
-    //WKContentView
     NSString *className = [@"WKCo" stringByAppendingString:@"ntentView"];
     Class class = NSClassFromString(className);
-    SEL originalSelector = NSSelectorFromString(selectorName);
-    SEL newSelector = @selector(otEditingWebViewSwizzStartAssistingNode:userIsInteracting:blurPreviousNode:userObject:);
-    [self otEditingWebViewSwizzle:class original:originalSelector new:newSelector];
+
+    NSOperatingSystemVersion iOS_11_3_0 = (NSOperatingSystemVersion){11, 3, 0};
+
+    if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion: iOS_11_3_0]) {
+        //_startAssistingNode:userIsInteracting:blurPreviousNode:userObject:
+        NSString *selectorName = [[[[[[@"_startAs" stringByAppendingString:@"sisting"]
+                                     stringByAppendingString:@"Node:u"]
+                                    stringByAppendingString:@"serIsInter"]
+                                   stringByAppendingString:@"acting:blurPrev"]
+                                  stringByAppendingString:@"iousNode:changingAct"]
+                                stringByAppendingString:@"ivityState:userObject:"];
+        SEL originalSelector = NSSelectorFromString(selectorName);
+        SEL newSelector = @selector(otEditingWebViewSwizzStartAssistingNode:userIsInteracting:blurPreviousNode:changingActivityState:userObject:);
+        [self otEditingWebViewSwizzle:class original:originalSelector new:newSelector];
+    } else {
+        //_startAssistingNode:userIsInteracting:blurPreviousNode:userObject:
+        NSString *selectorName = [[[[[@"_startAs" stringByAppendingString:@"sisting"]
+                                     stringByAppendingString:@"Node:u"]
+                                    stringByAppendingString:@"serIsInter"]
+                                   stringByAppendingString:@"acting:blurPrev"]
+                                  stringByAppendingString:@"iousNode:userObject:"];
+        SEL originalSelector = NSSelectorFromString(selectorName);
+        SEL newSelector = @selector(otEditingWebViewSwizzStartAssistingNode:userIsInteracting:blurPreviousNode:userObject:);
+        [self otEditingWebViewSwizzle:class original:originalSelector new:newSelector];
+    }
 }
 
 + (void)otEditingWebViewSwizzle:(Class)c original:(SEL)orig new:(SEL) new
@@ -42,8 +57,19 @@
     }
 }
 
+- (void)otEditingWebViewSwizzStartAssistingNode:(void *)node userIsInteracting:(BOOL)isInteracting blurPreviousNode:(BOOL)blurPreviousNode changingActivityState:(BOOL)changingActivityState userObject:(id)userObject
+{
+    BOOL userIsInteraction = [self _triggerUserIsInteracting:isInteracting];
+    [self otEditingWebViewSwizzStartAssistingNode:node userIsInteracting:userIsInteraction blurPreviousNode:blurPreviousNode changingActivityState:changingActivityState userObject:userObject];
+}
+
 - (void)otEditingWebViewSwizzStartAssistingNode:(void *)node userIsInteracting:(BOOL)isInteracting blurPreviousNode:(BOOL)blurPreviousNode userObject:(id)userObject
 {
+    BOOL userIsInteraction = [self _triggerUserIsInteracting:isInteracting];
+    [self otEditingWebViewSwizzStartAssistingNode:node userIsInteracting:userIsInteraction blurPreviousNode:blurPreviousNode userObject:userObject];
+}
+
+- (BOOL)_triggerUserIsInteracting:(BOOL)isInteracting {
     UIView *superView = self;
     while (superView)
     {
@@ -53,15 +79,14 @@
             break;
         }
     }
-    
+
     BOOL canActiveWithoutUserInteraction = NO;
     if ([superView isKindOfClass:[WKWebView class]])
     {
         canActiveWithoutUserInteraction = [((WKWebView *)superView) canActiveKeyboardWithoutUserInteraction];
     }
-    
-    BOOL userIsInteraction = canActiveWithoutUserInteraction || isInteracting;
-    [self otEditingWebViewSwizzStartAssistingNode:node userIsInteracting:userIsInteraction blurPreviousNode:blurPreviousNode userObject:userObject];
+
+    return canActiveWithoutUserInteraction || isInteracting;
 }
 
 
